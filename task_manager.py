@@ -1,3 +1,5 @@
+tasks = [] #List to store tasks
+
 def display_menu():
     print("Task Manager")
     print("1. Add Task")
@@ -5,14 +7,27 @@ def display_menu():
     print("3. Delete Task")
     print("4. Exit")
 
+def add_task():
+    task = input("Enter the task: ")
+    tasks.append(task)
+    print(f'Task "{task}" added successfully!')
+
+def view_task():
+    if not tasks:
+        print("No tasks available.")
+    else:
+        print("\nYour Tasks:")
+        for i, task in enumerate(tasks, start=1):
+            print(f"{i}. {task}")
+
 def main():
     while True:
         display_menu()
         choice = input("Enter your choice (1-4): ")
         if choice == "1":
-            print("Feature to add task comming soon...")
+            add_task()
         elif choice == "2":
-            print("Feature to view tasks comming soon...")
+            view_task()
         elif choice == "3":
             print("Feature to delete task comming soon...")
         elif choice == "4":
