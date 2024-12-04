@@ -1,4 +1,5 @@
 tasks = [] #List to store tasks
+TASK_FILE = "tasks.txt" # File to save tasks
 
 def display_menu():
     print("Task Manager")
@@ -35,7 +36,26 @@ def delete_task():
         except ValueError:
             print("Invalid input. Please enter a number.")
 
+def load_task():
+    """Load tasks from the file"""
+    try:
+        with open(TASK_FILE, "r") as file:
+            for line in file:
+                tasks.append(line.strip())
+        print(f"Loaded {len(tasks)} tasks from {TASK_FILE}.")
+    except FileNotFoundError:
+        print(f"no existing task file found. Starting fresh.")
+
+def save_task():
+    """Save tasks to the file"""
+    with open(TASK_FILE, "w") as file:
+        for task in tasks:
+            file.write(task + "\n")
+    print(f"Tasks saved to {TASK_FILE}.")
+
+
 def main():
+    load_task()
     while True:
         display_menu()
         choice = input("Enter your choice (1-4): ")
@@ -46,7 +66,8 @@ def main():
         elif choice == "3":
             delete_task()
         elif choice == "4":
-            print("Exiting Task Manager. Goodbye!")
+            save_task()
+            print("Exiting Task Manager.Goodbye!")
             break
         else: 
             print("Invalid choice. Please try again.")
