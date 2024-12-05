@@ -2,16 +2,21 @@ tasks = [] #List to store tasks
 TASK_FILE = "tasks.txt" # File to save tasks
 
 def display_menu():
-    print("Task Manager")
+    print("\nTask Manager")
     print("1. Add Task")
     print("2. View Task")
     print("3. Delete Task")
     print("4. Exit")
 
 def add_task():
-    task = input("Enter the task: ")
+    task_description = input("Enter the task: ")
+    priority = input("Enter the priority (High, Medium, Low): ").capitalize()
+    if priority not in ["High", "Medium", "Low"]:
+        print("Invalid priority! Defaulting to 'Medium'.")
+        priority = "Medium"
+    task = {"description": task_description, "priority": priority}
     tasks.append(task)
-    print(f'Task "{task}" added successfully!')
+    print(f'Task "{task_description}" with priority "{priority}" added successfully!')
 
 def view_task():
     if not tasks:
@@ -19,7 +24,7 @@ def view_task():
     else:
         print("\nYour Tasks:")
         for i, task in enumerate(tasks, start=1):
-            print(f"{i}. {task}")
+            print(f"{i}. [{task['priority']}] {task['description']}")
 
 def delete_task():
     if not tasks:
