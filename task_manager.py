@@ -6,7 +6,8 @@ def display_menu():
     print("1. Add Task")
     print("2. View Task")
     print("3. Delete Task")
-    print("4. Exit")
+    print("4. Sort Tasks by Priority")
+    print("5. Exit")
 
 def add_task():
     task_description = input("Enter the task: ")
@@ -41,12 +42,21 @@ def delete_task():
         except ValueError:
             print("Invalid input. Please enter a number.")
 
+def sort_tasks_by_priority():
+    """Sort tasks by priority: High > Medium > Low."""
+    priority_order = {"High": 1, "Medium": 2, "Low": 3}
+    sorted_tasks = sorted(tasks, key=lambda task: priority_order[task["priority"]])
+    tasks.clear()
+    tasks.extend(sorted_tasks)
+    print("Tasks sorted by priority!")
+
 def load_task():
     """Load tasks from the file"""
     try:
         with open(TASK_FILE, "r") as file:
             for line in file:
-                tasks.append(line.strip())
+                task_description, priority = line.strip().split(" | ")
+                tasks.append({"description": task_description, "priotity": priority})
         print(f"Loaded {len(tasks)} tasks from {TASK_FILE}.")
     except FileNotFoundError:
         print(f"no existing task file found. Starting fresh.")
@@ -55,7 +65,7 @@ def save_task():
     """Save tasks to the file"""
     with open(TASK_FILE, "w") as file:
         for task in tasks:
-            file.write(task + "\n")
+            file.write(f"{task['description']} | {task['priority']}\n")
     print(f"Tasks saved to {TASK_FILE}.")
 
 
@@ -63,7 +73,7 @@ def main():
     load_task()
     while True:
         display_menu()
-        choice = input("Enter your choice (1-4): ")
+        choice = input("Enter your choice (1-5): ")
         if choice == "1":
             add_task()
         elif choice == "2":
@@ -71,6 +81,8 @@ def main():
         elif choice == "3":
             delete_task()
         elif choice == "4":
+            sort_tasks_by_priority()
+        elif choice == "5":
             save_task()
             print("Exiting Task Manager.Goodbye!")
             break
