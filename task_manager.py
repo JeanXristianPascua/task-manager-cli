@@ -56,7 +56,7 @@ def load_task():
         with open(TASK_FILE, "r") as file:
             for line in file:
                 task_description, priority = line.strip().split(" | ")
-                tasks.append({"description": task_description, "priotity": priority})
+                tasks.append({"description": task_description, "priority": priority})
         print(f"Loaded {len(tasks)} tasks from {TASK_FILE}.")
     except FileNotFoundError:
         print(f"no existing task file found. Starting fresh.")

@@ -1,4 +1,0 @@
-clean | High
-wash  | Medium
-t | Medium
-l | Low
