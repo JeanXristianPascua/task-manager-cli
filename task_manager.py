@@ -26,7 +26,7 @@ def view_task(filtered=None):
     """View all tasks, or filter by completion status."""
     filtered_tasks = tasks
     if filtered == "completed":
-        filtered_tasks = [tasks for task in tasks if task["completed"]]
+        filtered_tasks = [task for task in tasks if task["completed"]]
     elif filtered == "incomplete":
         filtered_tasks = [task for task in tasks if not task["completed"]]
 
@@ -81,8 +81,14 @@ def load_task():
     try:
         with open(TASK_FILE, "r") as file:
             for line in file:
-                task_description, priority, completed = line.strip().split(" | ")
-                tasks.append({"description": task_description, "priority": priority, "completed": completed == "True"})
+                line = line.strip()
+                if " | " in line: #Ensure the line is in the correct format
+                    task_description, priority, completed = line.split(" | ")
+                    tasks.append({
+                        "description": task_description,
+                        "priority": priority,
+                        "completed": completed == "True"
+                    })
         print(f"Loaded {len(tasks)} tasks from {TASK_FILE}.")
     except FileNotFoundError:
         print(f"no existing task file found. Starting fresh.")
