@@ -5,10 +5,12 @@ def display_menu():
     print("\nTask Manager")
     print("1. Add Task")
     print("2. View Task")
-    print("3. Delete Task")
-    print("4. Sort Tasks by Priority")
-    print("5. Mark Task as Completed")
-    print("6. Exit")
+    print("3. View Completed Tasks")
+    print("4. View Incompleted Tasks")
+    print("5. Delete Task")
+    print("6. Sort Tasks by Priority")
+    print("7. Mark Task as Completed")
+    print("8. Exit")
 
 def add_task():
     task_description = input("Enter the task: ")
@@ -16,16 +18,23 @@ def add_task():
     if priority not in ["High", "Medium", "Low"]:
         print("Invalid priority! Defaulting to 'Medium'.")
         priority = "Medium"
-    task = {"description": task_description, "priority": priority, "completed":False}
+    task = {"description": task_description, "priority": priority, "completed": False}
     tasks.append(task)
     print(f'Task "{task_description}" with priority "{priority}" added successfully!')
 
-def view_task():
-    if not tasks:
+def view_task(filtered=None):
+    """View all tasks, or filter by completion status."""
+    filtered_tasks = tasks
+    if filtered == "completed":
+        filtered_tasks = [tasks for task in tasks if task["completed"]]
+    elif filtered == "incomplete":
+        filtered_tasks = [task for task in tasks if not task["completed"]]
+
+    if not filtered_tasks:
         print("No tasks available.")
     else:
         print("\nYour Tasks:")
-        for i, task in enumerate(tasks, start=1):
+        for i, task in enumerate(filtered_tasks, start=1):
             status = "[X]" if task["completed"] else "[ ]"
             print(f"{i}. {status} [{task['priority']}] {task['description']}")
 
@@ -48,7 +57,7 @@ def mark_task_completed():
     if not tasks:
         print("No tasks to mark as completed.")
     else:
-        view_task()
+        view_task(filtered="incomplete")
         try:
             task_number = int(input("Enter the number of the task to mark as completed: "))
             if 1<= task_number <= len(tasks):
@@ -90,18 +99,22 @@ def main():
     load_task()
     while True:
         display_menu()
-        choice = input("Enter your choice (1-6): ")
+        choice = input("Enter your choice (1-8): ")
         if choice == "1":
             add_task()
         elif choice == "2":
             view_task()
         elif choice == "3":
-            delete_task()
+            view_task(filtered="completed")
         elif choice == "4":
-            sort_tasks_by_priority()
+            view_task(filtered="incomplete")
         elif choice == "5":
-            mark_task_completed()
+            delete_task()
         elif choice == "6":
+            sort_tasks_by_priority()
+        elif choice == "7":
+            mark_task_completed()
+        elif choice == "8":
             save_task()
             print("Exiting Task Manager.Goodbye!")
             break
