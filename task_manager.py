@@ -10,7 +10,8 @@ def display_menu():
     print("5. Delete Task")
     print("6. Sort Tasks by Priority")
     print("7. Mark Task as Completed")
-    print("8. Exit")
+    print("8. Edit Task")
+    print("9. Exit")
 
 def add_task():
     task_description = input("Enter the task: ")
@@ -100,6 +101,36 @@ def save_task():
             file.write(f"{task['description']} | {task['priority']} | {task['completed']}\n")
     print(f"Tasks saved to {TASK_FILE}.")
 
+def edit_task():
+    if not tasks:
+        print("No tasks to edit.")
+    else:
+        view_task()
+        try:
+            task_number = int(input("Enter the number of the task to edit: "))
+            if 1 <= task_number <= len(tasks):
+                task_to_edit = tasks[task_number - 1]
+                print(f"Edit Task: {task_to_edit['description']} (Priority: {task_to_edit['priority']})")
+
+                # Edit description
+                new_description = input("Enter new description (leave blank to keep current): ").strip()
+                if new_description:
+                    task_to_edit["description"] = new_description
+
+                # Edit priority
+                new_priority = input("Enter new priority (High, Medium, Low, leave blank to keep current): ").capitalize()
+                if new_priority in ["High", "Medium", "Low"]:
+                    task_to_edit["priority"] = new_priority
+                elif new_priority:
+                    print("Invalid property entered. Keeping current priority.")
+
+                print("Task updated successfully!")
+            else:
+                print("Invalid task number. Please try again.")
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+        
+
 
 def main():
     load_task()
@@ -121,6 +152,8 @@ def main():
         elif choice == "7":
             mark_task_completed()
         elif choice == "8":
+            edit_task()
+        elif choice == "9":
             save_task()
             print("Exiting Task Manager.Goodbye!")
             break
